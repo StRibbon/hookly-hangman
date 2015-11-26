@@ -4,10 +4,29 @@
     <meta charset="utf-8">
     <title>Hookly Project</title>
     <!-- styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
-  <body>
+  <body ng-controller="MainCtrl">
+    <div class="row">
+      <form ng-submit="loginUser(userName)" class="col s12" name="login_form">
+        <div class="row">
+          <div class="input-field col s6">
+            <i class="material-icons prefix">account_circle</i>
+            <input id="icon_prefix" type="text" class="validate" ng-model="userName">
+            <label for="icon_prefix">Choose a username</label>
+            <button type="submit" class="btn waves-effect waves-light col s12">Start Game</button>
+            
+          </div>
+        </div>
+      </form>
+    </div>
 
+    {{userId}}
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-cookies.min.js"></script>
     <script src="/hookly.js"></script>
     <script src="/shortid.js"></script>
     <script src="app.js"></script>

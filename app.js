@@ -16,8 +16,6 @@ app.get('/shortid.js', function(req,res){
   b.bundle().pipe(res);
 });
 
-
-
 app.listen(3000, function(){
   console.log("Server running on 3000");
 });
