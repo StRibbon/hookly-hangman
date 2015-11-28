@@ -6,27 +6,37 @@
     <!-- styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Amatic+SC:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="main.css">
   </head>
-  <body ng-controller="MainCtrl">
-    <div class="row">
-      <form ng-submit="loginUser(userName)" class="col s12" name="login_form">
+  <body class="container" ng-controller="MainCtrl" ui-view>
+    <!-- START -->
+    <div class="row" ng-hide="$root.name">
+      <form ng-submit="loginUser(name)" name="login_form">
         <div class="row">
           <div class="input-field col s6">
-            <i class="material-icons prefix">account_circle</i>
-            <input id="icon_prefix" type="text" class="validate" ng-model="userName">
-            <label for="icon_prefix">Choose a username</label>
-            <button type="submit" class="btn waves-effect waves-light col s12">Start Game</button>
-            
-          </div>
+          <p>GIVE YOURSELF A BADASS NAME PLAYER</p>
+            <input id="icon_prefix" type="text" class="validate" ng-model="name" autofocus>  
+          </div>       
         </div>
       </form>
     </div>
+    <!-- LEVEL 1? -->
+    <div ng-if="$root.name">
+      <span>
+      <i class="material-icons">accessibility</i>
+      {{$root.name}}
+      </span>
+    </div>
+    list:{{list}}
+    <ul ng-repeat="users in list">
+      <li ng-hide="$root.id == users.id">{{users.name}}</li>
+    </ul>
 
-    {{userId}}
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0-beta.2/angular-cookies.min.js"></script>
+    <script src="/jquery"></script>
     <script src="/hookly.js"></script>
     <script src="/shortid.js"></script>
     <script src="app.js"></script>

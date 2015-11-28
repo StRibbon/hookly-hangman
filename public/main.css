@@ -1,0 +1,23 @@
+body {
+  background-color: white;
+  font-family: 'Amatic SC', cursive;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.game-box {
+  height: 30rem;
+  width: 30rem;
+  background-color: black;
+  border-radius: 1rem;	
+}
+
+#game-ball {
+  display: block;
+  background: black;
+  border-radius: 50%;
+  height: 6rem;
+  width: 6rem;
+  margin: 0;
+  background: radial-gradient(circle at 2rem 2rem, #5cabff, #000);
+}
