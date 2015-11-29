@@ -9,7 +9,6 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   console.log($rootScope.id);
   hookly.start('T2rTVLncKjd1G0wuRR8ks22FMeRyzu-UyKfOqmdldXxFIzhV', $scope.user.id);
   
-  
   $scope.loginUser = function(name){
     //$cookieStore.put('name', name);
     $rootScope.name = name;
@@ -21,7 +20,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
       console.log(data);
       $scope.addUser(data);
       $scope.getList($scope.user.id);
-      alert(data + " joined");     
+      //alert(data + " joined");     
   }); 
 
   $scope.addUser = function(data) {
@@ -47,13 +46,29 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   });
 
   $scope.play = function(uid){
+    var req = { 
+      from: {id: $rootScope.id, 
+        name: $scope.user.name
+      },
+      message: "is asking if you want to play Hangman"
+    };
     console.log("PLAY" + uid);
-    hookly.notify('req', uid, "Want to play?");
-    debugger
+    hookly.notify('req', uid, req);
   };
 
   hookly.on('req', function(data){
     console.log(data);
+    var res = prompt(data.from.name + data.message + ' Answer: yes or no!');
+    if(res == 'yes'){
+      hookly.notify('accepted', data.from.id, "HANGMAN" )
+      alert('Challenge accepted!');
+    } else {
+      alert('Challenge denied!');
+    }
+  });
+
+  hookly.on('accepted', function(data){
+    alert(data);
   });
 
 });
