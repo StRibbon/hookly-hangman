@@ -27,7 +27,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   $scope.addUser = function(data) {
     setTimeout(function() {
       $scope.list.push(data);
-      console.log('message:' + data);
+      console.log('Added to list:' + data);
       $scope.$apply();
     }, 0);
   };
@@ -42,8 +42,18 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
 
   hookly.on('sendList', function(data){
     $scope.list = data;
-    debugger;
+    //debugger;
     $scope.$apply();    
+  });
+
+  $scope.play = function(uid){
+    console.log("PLAY" + uid);
+    hookly.notify('req', uid, "Want to play?");
+    debugger
+  };
+
+  hookly.on('req', function(data){
+    console.log(data);
   });
 
 });
