@@ -21,7 +21,7 @@
         </div>
       </form>
     </div>
-    <!-- LEVEL 1? -->
+    <!-- PLAYER INFO -->
     <div ng-if="$root.name">
       <span>
       <i class="material-icons">accessibility</i>
@@ -32,6 +32,11 @@
     <ul ng-repeat="users in list">
       <li ng-hide="$root.id == users.id">{{users.name}}<i class="material-icons" ng-click="play(users.id)">play_arrow</i></li>
     </ul>
+    <!-- HANGMAN -->
+    <div ng-if="word">
+      <p>{{hangman}}</p>
+      <p>{{word.string}}</p>
+    </div>
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.js"></script>

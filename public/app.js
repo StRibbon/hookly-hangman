@@ -51,7 +51,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
       from: {id: $rootScope.id, 
         name: $scope.user.name
       },
-      message: "is asking if you want to play Hangman"
+      message: " is asking if you want to play HANGMAN"
     };
     console.log("PLAY" + uid);
     hookly.notify('req', uid, req);
@@ -59,8 +59,8 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   // RESPONSE TO PLAY
   hookly.on('req', function(data){
     console.log(data);
-    var res = prompt(data.from.name + data.message + ' Answer: yes or no!');
-    if(res == 'yes'){
+    var res = prompt(data.from.name.toUpperCase() + data.message + ' Answer: YES or NO!');
+    if(res.toLowerCase() == 'yes'){
       hookly.notify('accepted', data.from.id, "HANGMAN" )
       alert('Challenge accepted!');
     } else {
@@ -69,8 +69,20 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   });
   // BEGIN GAME PLAY
   hookly.on('accepted', function(data){
-    alert(data);
+    var word = prompt('Choose a word');
+    var len = word.length;
+    $scope.word = {length: len, string: word};
+    $scope.$apply();
+    hookly.notify('word', word);
   });
+
+  hookly.on('word', function(data){
+    var len = data.length;
+    $scope.word = {length: len, string: data};
+    $scope.$apply();
+  });
+
+  $scope.hangman = ['O', '|', '/', '\\', '-','-'];
 
 });
 
