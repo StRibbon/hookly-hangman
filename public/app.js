@@ -9,20 +9,21 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   console.log($rootScope.id);
   hookly.start('T2rTVLncKjd1G0wuRR8ks22FMeRyzu-UyKfOqmdldXxFIzhV', $scope.user.id);
   
+  // SAVE USER NAME AND NOTIFY
   $scope.loginUser = function(name){
     //$cookieStore.put('name', name);
     $rootScope.name = name;
     $scope.user.name = name;
     hookly.notify('joined', $scope.user);
   };
-
+  
   hookly.on('joined', function(data){
       console.log(data);
       $scope.addUser(data);
       $scope.getList($scope.user.id);
       //alert(data + " joined");     
   }); 
-
+  // ADD PLAYER TO LIST AND UPDATE UI
   $scope.addUser = function(data) {
     setTimeout(function() {
       $scope.list.push(data);
@@ -34,17 +35,17 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   $scope.getList = function(uid){
   	hookly.notify('getList', uid);
   };
-
+  // RESPONSE TO GET LIST = SEND LIST
   hookly.on('getList', function(uid){
   	hookly.notify('sendList', uid, $scope.list);
   });
-
+  // ADD PLAYERS TO ONLINE LIST
   hookly.on('sendList', function(data){
     $scope.list = data;
     //debugger;
     $scope.$apply();    
   });
-
+  // REQUEST TO PLAY
   $scope.play = function(uid){
     var req = { 
       from: {id: $rootScope.id, 
@@ -55,7 +56,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
     console.log("PLAY" + uid);
     hookly.notify('req', uid, req);
   };
-
+  // RESPONSE TO PLAY
   hookly.on('req', function(data){
     console.log(data);
     var res = prompt(data.from.name + data.message + ' Answer: yes or no!');
@@ -66,7 +67,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
       alert('Challenge denied!');
     }
   });
-
+  // BEGIN GAME PLAY
   hookly.on('accepted', function(data){
     alert(data);
   });

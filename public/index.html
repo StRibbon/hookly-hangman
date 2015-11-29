@@ -28,7 +28,7 @@
       {{$root.name}}
       </span>
     </div>
-    list:{{list}}
+    <!-- list:{{list}} -->
     <ul ng-repeat="users in list">
       <li ng-hide="$root.id == users.id">{{users.name}}<i class="material-icons" ng-click="play(users.id)">play_arrow</i></li>
     </ul>
