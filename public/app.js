@@ -59,7 +59,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   // RESPONSE TO PLAY
   hookly.on('req', function(data){
     console.log(data);
-    var res = prompt(data.from.name.toUpperCase() + data.message + ' Answer: YES or NO!');
+    var res = prompt(data.from.name.toUpperCase() + data.message + '\n Answer: YES or NO!');
     if(res.toLowerCase() == 'yes'){
       hookly.notify('accepted', data.from.id, "HANGMAN" )
       alert('Challenge accepted!');
@@ -72,11 +72,13 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
     var word = prompt('Choose a word');
     var len = word.length;
     $scope.word = {length: len, string: word};
+    $scope.role = 'Chooser';
     $scope.$apply();
     hookly.notify('word', word);
   });
 
   hookly.on('word', function(data){
+    $scope.role = 'Guesser';
     var len = data.length;
     $scope.word = {length: len, string: data};
     $scope.$apply();

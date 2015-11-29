@@ -24,8 +24,9 @@
     <!-- PLAYER INFO -->
     <div ng-if="$root.name">
       <span>
-      <i class="material-icons">accessibility</i>
-      {{$root.name}}
+        <i class="material-icons">accessibility</i>
+        {{$root.name}}
+        <span ng-if="role"> = {{role}}</span>
       </span>
     </div>
     <!-- list:{{list}} -->
