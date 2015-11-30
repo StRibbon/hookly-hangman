@@ -35,8 +35,34 @@
     </ul>
     <!-- HANGMAN -->
     <div ng-if="word">
-      <p>{{hangman}}</p>
-      <p>{{word.string}}</p>
+      <ul ng-repeat="part in man">
+        <li>{{part}}</li>
+      </ul>
+      <p ng-if="role == 'chooser'">"{{word.string}}"</p>
+      <div>
+        {{word.length}} letters
+      </div>
+      <span ng-repeat="input in wordArr track by $index">
+        <span class="letter-guesses">{{input}}</span>
+      </span>
+      <form ng-if="role == 'guesser'" ng-submit="submitLetter(letter); letter = ''" name="letter_form">
+        <div class="row">
+          <div class="col s4 m4 l4">
+            <p>Guess a LETTER</p>
+            <div class="input-field col s3 m3 l3">         
+              <input id="icon_prefix" type="text" class="validate s3 m3 l3" ng-model="letter" autofocus>  
+            </div>
+          </div>
+      </form>
+      <form ng-if="role == 'guesser'" ng-submit="submitWord(wordGuess); word = ''" name='word_form'>
+          <div class="col s8 m8 l8">
+            <p>Guess the WORD</p>
+            <div class="input-field">         
+              <input id="icon_prefix" type="text" class="validate" ng-model="wordGuess" autofocus>  
+            </div>
+          </div>           
+        </div>
+      </form>
     </div>
 
     <!-- Scripts -->

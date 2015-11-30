@@ -10,3 +10,8 @@ input {
   font-weight: bold !important;
   font-color: red !important;
 }
+
+.letter-guesses {
+  font-size: 4rem;
+  margin-right: 2rem;
+}

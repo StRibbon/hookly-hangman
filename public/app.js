@@ -4,6 +4,8 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   
   $scope.list = [];
   $scope.user = {};
+  $scope.user.wins = 0;
+  $scope.user.loses = 0;
   $scope.user.id = shortid.generate();
   $rootScope.id = $scope.user.id;
   console.log($rootScope.id);
@@ -62,7 +64,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
     var res = prompt(data.from.name.toUpperCase() + data.message + '\n Answer: YES or NO!');
     if(res.toLowerCase() == 'yes'){
       hookly.notify('accepted', data.from.id, "HANGMAN" )
-      alert('Challenge accepted!');
+      //alert('Challenge accepted!');
     } else {
       alert('Challenge denied!');
     }
@@ -71,20 +73,55 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   hookly.on('accepted', function(data){
     var word = prompt('Choose a word');
     var len = word.length;
-    $scope.word = {length: len, string: word};
-    $scope.role = 'Chooser';
+    $scope.word = {length: len, string: word.toLowerCase()};
+    $scope.role = 'chooser';
+    $scope.wordArr = [];
+    for(var i=0; i < len; i++){
+      $scope.wordArr.push('_');
+    };
     $scope.$apply();
     hookly.notify('word', word);
   });
 
   hookly.on('word', function(data){
-    $scope.role = 'Guesser';
+    $scope.role = 'guesser';
     var len = data.length;
+    $scope.wordArr = [];
+    for(var i=0; i < len; i++){
+      $scope.wordArr.push('_');
+    };
     $scope.word = {length: len, string: data};
     $scope.$apply();
   });
 
-  $scope.hangman = ['O', '|', '/', '\\', '-','-'];
+  $scope.hangman = [' O', '- ', '-', ' |', '/', '\\'];
+  $scope.count = -1;
+  $scope.man = [];
+
+  $scope.submitLetter = function(letter){
+    var str = $scope.word.string.split('');
+    console.log(str);
+    var found = false;
+    for(var i in str){
+      if(str[i] == letter.toLowerCase()){
+        //alert(letter + " is correct!");
+        $scope.wordArr[i] = letter;
+        var found = true;
+        //$scope.$apply();
+      }
+    }
+    if(found == false){
+      if($scope.count == 4){
+        alert("YOU LOST, MAN IS BUILT");
+        $scope.user.loses += 1;
+        $scope.count += 1;
+        $scope.man.push($scope.hangman[$scope.count]);
+      } else {
+        $scope.count += 1;
+        $scope.man.push($scope.hangman[$scope.count]);
+      }  
+    }
+  }
 
 });
 
