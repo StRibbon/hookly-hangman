@@ -75,6 +75,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   });
   // BEGIN GAME PLAY
   hookly.on('accepted', function(data){
+    $scope.man = [];
     var word = prompt('CHOOSE A WORD:');
     var len = word.length;
     $scope.word = {length: len, string: word.toLowerCase()};
@@ -88,6 +89,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   });
 
   hookly.on('word', function(data){
+    $scope.man = [];
     $scope.role = 'guesser';
     var len = data.length;
     $scope.wordArr = [];
@@ -109,6 +111,10 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
     for(var i in str){
       if(str[i] == letter.toLowerCase()){
         //alert(letter + " is correct!");
+        letterToSend = {};
+        letterToSend.index = i;
+        letterToSend.letter = letter;
+        hookly.notify('letterFound', letterToSend);
         $scope.wordArr[i] = letter;
         var found = true;
         //$scope.$apply();
@@ -119,30 +125,31 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
         alert("YOU LOST, MAN IS BUILT");
         $scope.user.loses += 1;
         $scope.count += 1;
+        hookly.notify('playerLost', $scope.count);
         $scope.man.push($scope.hangman[$scope.count]);
       } else {
         $scope.count += 1;
+        hookly.notify('addPart', $scope.count);
         $scope.man.push($scope.hangman[$scope.count]);
       }  
     }
   }
 
+  hookly.on('letterFound', function(data){
+    console.log(data);
+    $scope.wordArr[data.index] = data.letter;
+    $scope.$apply();   
+  });
+
+  hookly.on('addPart', function(data){
+    $scope.man.push($scope.hangman[data]);
+    $scope.$apply();
+  });
+
+  hookly.on('playerLost', function(data){
+    $scope.man.push($scope.hangman[data]);
+    alert("You WON!");
+    $scope.user.wins += 1; 
+  })
 });
-
-//var userId = shortid.generate();
-//console.log(userId);
-
-//window.title = userId;
-
-//hookly.start('T2rTVLncKjd1G0wuRR8ks22FMeRyzu-UyKfOqmdldXxFIzhV', userId);
-
-//hookly.notify('message', "Hello Twirl");
-
-//hookly.notify('move', {x, y});
-
-// hookly.on('message', function(data){
-//   console.log(data);
-// });
-
-// hookly.notify('message', 'NkbMp16Xx', 'Sup Mane');
 
