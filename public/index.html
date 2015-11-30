@@ -13,11 +13,13 @@
     <!-- START -->
     <div class="row" ng-hide="$root.name">
       <form ng-submit="loginUser(name)" name="login_form">
-        <div class="row">
-          <div class="input-field col s6">
-          <p>GIVE YOURSELF A BADASS NAME PLAYER</p>
+        <div class="col s8 m6 l6">
+          <div class="input-field">
+          <p>PLAYER, GIVE YOURSELF A NAME</p>
             <input id="icon_prefix" type="text" class="validate" ng-model="name" autofocus>  
           </div>       
+        </div>
+        <div class="col s4 m6 l6">
         </div>
       </form>
     </div>
@@ -31,7 +33,7 @@
     </div>
     <!-- list:{{list}} -->
     <ul ng-repeat="users in list">
-      <li ng-hide="$root.id == users.id">{{users.name}}<i class="material-icons" ng-click="play(users.id)">play_arrow</i></li>
+      <li ng-hide="$root.id == users.id">{{users.name}}<a ng-click="play(users.id)"><i class="material-icons">play_arrow</i></a></li>
     </ul>
     <!-- HANGMAN -->
     <div ng-if="word">
@@ -48,15 +50,15 @@
       <form ng-if="role == 'guesser'" ng-submit="submitLetter(letter); letter = ''" name="letter_form">
         <div class="row">
           <div class="col s4 m4 l4">
-            <p>Guess a LETTER</p>
-            <div class="input-field col s3 m3 l3">         
+            <p>guess the letter</p>
+            <div class="input-field">         
               <input id="icon_prefix" type="text" class="validate s3 m3 l3" ng-model="letter" autofocus>  
             </div>
           </div>
       </form>
       <form ng-if="role == 'guesser'" ng-submit="submitWord(wordGuess); word = ''" name='word_form'>
           <div class="col s8 m8 l8">
-            <p>Guess the WORD</p>
+            <p>guess the word</p>
             <div class="input-field">         
               <input id="icon_prefix" type="text" class="validate" ng-model="wordGuess" autofocus>  
             </div>

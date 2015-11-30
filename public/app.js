@@ -61,6 +61,10 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   // RESPONSE TO PLAY
   hookly.on('req', function(data){
     console.log(data);
+    if($scope.list.length == 0){
+      var userToAdd = data.from;
+      $scope.addUser(userToAdd);
+    }
     var res = prompt(data.from.name.toUpperCase() + data.message + '\n Answer: YES or NO!');
     if(res.toLowerCase() == 'yes'){
       hookly.notify('accepted', data.from.id, "HANGMAN" )
@@ -71,7 +75,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   });
   // BEGIN GAME PLAY
   hookly.on('accepted', function(data){
-    var word = prompt('Choose a word');
+    var word = prompt('CHOOSE A WORD:');
     var len = word.length;
     $scope.word = {length: len, string: word.toLowerCase()};
     $scope.role = 'chooser';
