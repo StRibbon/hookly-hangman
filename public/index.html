@@ -27,10 +27,10 @@
     <div ng-if="$root.name">
       <span>
         <i class="material-icons">accessibility</i>
-        {{$root.name}}
+        {{$root.name}} 
+        <span>wins:{{user.wins}} loses:{{user.loses}}</span>
         <span ng-if="role"> = {{role}}</span>
       </span>
-     <!--  <p>Wins:{{user.wins}} Loses:{{user.loses}}</p> -->
     </div>
     <!-- list:{{list}} -->
     <ul ng-repeat="users in list">
@@ -38,7 +38,7 @@
     </ul>
     <!-- HANGMAN -->
     <div ng-if="word">
-      <ul ng-repeat="part in man">
+      <ul class="man-parts" ng-repeat="part in man">
         <li>{{part}}</li>
       </ul>
       <p ng-if="role == 'chooser'">"{{word.string}}"</p>
@@ -67,6 +67,10 @@
         </div>
       </form>
     </div>
+
+   <!--  <img class="hangblock" ng-src="hangblock.svg">
+    <img class="hangblock" ng-src="head.svg">
+    <img class="hangblock" ng-src="torso.svg"> -->
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.js"></script>

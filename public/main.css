@@ -15,3 +15,11 @@ input {
   font-size: 4rem;
   margin-right: 2rem;
 }
+
+.man-parts {
+  line-height: 2%;
+}
+.hangblock {
+  position: absolute;
+  z-index: 2;
+}

@@ -124,9 +124,9 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
       if($scope.count == 4){
         alert("YOU LOST, MAN IS BUILT");
         $scope.user.loses += 1;
-        $scope.count += 1;
-        hookly.notify('playerLost', $scope.count);
+        $scope.count += 1;  
         $scope.man.push($scope.hangman[$scope.count]);
+        hookly.notify('playerLost', $scope.count);
       } else {
         $scope.count += 1;
         hookly.notify('addPart', $scope.count);
@@ -147,9 +147,11 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   });
 
   hookly.on('playerLost', function(data){
+    debugger
     $scope.man.push($scope.hangman[data]);
-    alert("You WON!");
-    $scope.user.wins += 1; 
+    $scope.user.wins += 1;
+    $scope.$apply();
+    alert("You WON!"); 
   })
 });
 
