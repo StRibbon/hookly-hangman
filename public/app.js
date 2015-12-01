@@ -1,6 +1,6 @@
-var app = angular.module('Hookly-App', ['ngCookies']);
+var app = angular.module('Hookly-App', []);
 
-app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
+app.controller('MainCtrl', function($scope, $rootScope){
   
   $scope.list = [];
   $scope.user = {};
@@ -8,32 +8,20 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   $scope.user.loses = 0;
   $scope.user.id = shortid.generate();
   $rootScope.id = $scope.user.id;
-  //console.log($rootScope.id);
   hookly.start('T2rTVLncKjd1G0wuRR8ks22FMeRyzu-UyKfOqmdldXxFIzhV', $scope.user.id);
   
   // SAVE USER NAME AND NOTIFY
   $scope.loginUser = function(name){
-    //$cookieStore.put('name', name);
     $rootScope.name = name;
     $scope.user.name = name;
     hookly.notify('joined', $scope.user);
+    $scope.getList($scope.user.id);
   };
   
   hookly.on('joined', function(data){
-      //console.log(data);
-      $scope.addUser(data);
-      $scope.getList($scope.user.id);
-      //alert(data + " joined");     
+    $scope.list.push(data);
+    $scope.$apply(); 
   }); 
-  
-  // ADD PLAYER TO LIST AND UPDATE UI
-  $scope.addUser = function(data) {
-    setTimeout(function() {
-      $scope.list.push(data);
-      //console.log('Added to list:' + data);
-      $scope.$apply();
-    }, 0);
-  };
 
   $scope.getList = function(uid){
   	hookly.notify('getList', uid);
@@ -46,6 +34,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
 
   // ADD PLAYERS TO ONLINE LIST
   hookly.on('sendList', function(data){
+    console.log(data);
     $scope.list = data;
     //debugger;
     $scope.$apply();    
