@@ -2,7 +2,7 @@
 <html ng-app="Hookly-App">
   <head lang="en">
     <meta charset="utf-8">
-    <title>Hookly Project</title>
+    <title>Hookly-Hangman</title>
     <!-- styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -42,11 +42,11 @@
         <li>{{part}}</li>
       </ul>
       <p ng-if="role == 'chooser'">"{{word.string}}"</p>
-      <div>
+      <div ng-if="role != ''">
         {{word.length}} letters
       </div>
-      <span ng-repeat="input in wordArr track by $index">
-        <span class="letter-guesses">{{input}}</span>
+      <span ng-if="role != ''" ng-repeat="letter in wordArr track by $index">
+        <span class="letter-guesses">{{letter}}</span>
       </span>
       <form ng-if="role == 'guesser'" ng-submit="submitLetter(letter); letter = ''" name="letter_form">
         <div class="row">
@@ -57,7 +57,7 @@
             </div>
           </div>
       </form>
-      <form ng-if="role == 'guesser'" ng-submit="submitWord(wordGuess); word = ''" name='word_form'>
+      <form ng-if="role == 'guesser'" ng-submit="submitWord(wordGuess); wordGuess = ''" name='word_form'>
           <div class="col s8 m8 l8">
             <p>guess the word</p>
             <div class="input-field">         

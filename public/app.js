@@ -8,7 +8,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   $scope.user.loses = 0;
   $scope.user.id = shortid.generate();
   $rootScope.id = $scope.user.id;
-  console.log($rootScope.id);
+  //console.log($rootScope.id);
   hookly.start('T2rTVLncKjd1G0wuRR8ks22FMeRyzu-UyKfOqmdldXxFIzhV', $scope.user.id);
   
   // SAVE USER NAME AND NOTIFY
@@ -20,16 +20,17 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   };
   
   hookly.on('joined', function(data){
-      console.log(data);
+      //console.log(data);
       $scope.addUser(data);
       $scope.getList($scope.user.id);
       //alert(data + " joined");     
   }); 
+  
   // ADD PLAYER TO LIST AND UPDATE UI
   $scope.addUser = function(data) {
     setTimeout(function() {
       $scope.list.push(data);
-      console.log('Added to list:' + data);
+      //console.log('Added to list:' + data);
       $scope.$apply();
     }, 0);
   };
@@ -37,16 +38,19 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   $scope.getList = function(uid){
   	hookly.notify('getList', uid);
   };
+
   // RESPONSE TO GET LIST = SEND LIST
   hookly.on('getList', function(uid){
   	hookly.notify('sendList', uid, $scope.list);
   });
+
   // ADD PLAYERS TO ONLINE LIST
   hookly.on('sendList', function(data){
     $scope.list = data;
     //debugger;
     $scope.$apply();    
   });
+
   // REQUEST TO PLAY
   $scope.play = function(uid){
     var req = { 
@@ -55,9 +59,10 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
       },
       message: " is asking if you want to play HANGMAN"
     };
-    console.log("PLAY" + uid);
+    //console.log("PLAY" + uid);
     hookly.notify('req', uid, req);
   };
+  
   // RESPONSE TO PLAY
   hookly.on('req', function(data){
     console.log(data);
@@ -73,6 +78,7 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
       alert('Challenge denied!');
     }
   });
+
   // BEGIN GAME PLAY
   hookly.on('accepted', function(data){
     $scope.man = [];
@@ -106,8 +112,9 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
 
   $scope.submitLetter = function(letter){
     var str = $scope.word.string.split('');
-    console.log(str);
+    //console.log(str);
     var found = false;
+    // var won = false;
     for(var i in str){
       if(str[i] == letter.toLowerCase()){
         //alert(letter + " is correct!");
@@ -122,21 +129,67 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
     }
     if(found == false){
       if($scope.count == 4){
-        alert("YOU LOST, MAN IS BUILT");
-        $scope.user.loses += 1;
-        $scope.count += 1;  
-        $scope.man.push($scope.hangman[$scope.count]);
-        hookly.notify('playerLost', $scope.count);
+        $scope.playerLosesByCount();
       } else {
         $scope.count += 1;
         hookly.notify('addPart', $scope.count);
         $scope.man.push($scope.hangman[$scope.count]);
       }  
     }
+    $scope.checkWin($scope.wordArr);
+  }
+
+  $scope.submitWord = function(word){
+    if(word == $scope.word.string){
+      alert('"' + word + '"' + ' was correct. You WON!');
+      $scope.playerWins();
+      hookly.notify('playerWon', $scope.user.name);
+    } else {
+      alert('"' + word + '"' + ' was incorrect.');
+      if($scope.count == 4){
+        $scope.playerLosesByCount();
+      }
+      $scope.count += 1;
+      hookly.notify('addPart', $scope.count);
+      $scope.man.push($scope.hangman[$scope.count]);
+    }
+  };
+
+  $scope.checkWin = function(arr){
+    var won = true;
+    for(var i in arr){
+      if(arr[i] == '_'){
+        return false;
+      }
+    }
+    if(won == true){
+      hookly.notify('playerWon', $scope.user.name);
+      $scope.user.wins += 1;
+      $scope.role = '';
+      //alert('WON');
+    }
+  }
+
+  $scope.playerWins = function(){
+    $scope.user.wins += 1;
+    $scope.role = '';
+  };
+
+  $scope.playerLoses = function(){
+    $scope.user.loses += 1;
+    $scope.role = '';
+  }
+
+  $scope.playerLosesByCount = function(){
+    alert("YOU LOST, MAN IS BUILT");
+    $scope.playerLoses();
+    $scope.count += 1;  
+    $scope.man.push($scope.hangman[$scope.count]);       
+    hookly.notify('playerLost', $scope.count);
   }
 
   hookly.on('letterFound', function(data){
-    console.log(data);
+    //console.log(data);
     $scope.wordArr[data.index] = data.letter;
     $scope.$apply();   
   });
@@ -147,11 +200,17 @@ app.controller('MainCtrl', function($scope, $cookieStore, $rootScope){
   });
 
   hookly.on('playerLost', function(data){
-    debugger
     $scope.man.push($scope.hangman[data]);
-    $scope.user.wins += 1;
+    $scope.playerWins();
     $scope.$apply();
-    alert("You WON!"); 
+    alert($scope.user.name + ", you WON!"); 
+  });
+
+  hookly.on('playerWon', function(data){
+    $scope.user.loses += 1;
+    $scope.role = '';
+    $scope.$apply();
+    alert(data + ' wins!' + " You lost!");
   })
 });
 
