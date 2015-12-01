@@ -38,7 +38,7 @@
     </ul>
     <!-- HANGMAN -->
     <div ng-if="word">
-      <ul class="man-parts" ng-repeat="part in man">
+      <ul class="man-parts" ng-repeat="part in man track by $index">
         <li>{{part}}</li>
       </ul>
       <p ng-if="role == 'chooser'">"{{word.string}}"</p>
