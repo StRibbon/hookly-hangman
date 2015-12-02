@@ -34,9 +34,8 @@ app.controller('MainCtrl', function($scope, $rootScope){
 
   // ADD PLAYERS TO ONLINE LIST
   hookly.on('sendList', function(data){
-    console.log(data);
+    //console.log(data);
     $scope.list = data;
-    //debugger;
     $scope.$apply();    
   });
 
@@ -54,7 +53,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
   
   // RESPONSE TO PLAY
   hookly.on('req', function(data){
-    console.log(data);
+    //console.log(data);
     if($scope.list.length == 0){
       var userToAdd = data.from;
       $scope.addUser(userToAdd);
