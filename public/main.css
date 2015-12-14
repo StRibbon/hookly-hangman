@@ -20,7 +20,3 @@ input {
   line-height: 2%;
   color: red;
 }
-.hangblock {
-  position: absolute;
-  z-index: 2;
-}
