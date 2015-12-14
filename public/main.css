@@ -18,6 +18,7 @@ input {
 
 .man-parts {
   line-height: 2%;
+  color: red;
 }
 .hangblock {
   position: absolute;

@@ -8,6 +8,11 @@ app.controller('MainCtrl', function($scope, $rootScope){
   $scope.user.loses = 0;
   $scope.user.id = shortid.generate();
   $rootScope.id = $scope.user.id;
+  $scope.hangman = ['H', 'A', 'N', 'G', 'M', 'A', 'N'];
+  $scope.count = -1;
+  $scope.man = [];
+
+  // INITIATE SOCKET CONNECTION
   hookly.start('T2rTVLncKjd1G0wuRR8ks22FMeRyzu-UyKfOqmdldXxFIzhV', $scope.user.id);
   
   // SAVE USER NAME AND NOTIFY
@@ -17,7 +22,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
     hookly.notify('joined', $scope.user);
     $scope.getList($scope.user.id);
   };
-  
+  // ADD USER TO LIST ARRAY
   hookly.on('joined', function(data){
     $scope.list.push(data);
     $scope.$apply(); 
@@ -29,13 +34,12 @@ app.controller('MainCtrl', function($scope, $rootScope){
 
   // RESPONSE TO GET LIST = SEND LIST
   hookly.on('getList', function(uid){
-  	hookly.notify('sendList', uid, $scope.list);
+    hookly.notify('sendList', uid, $scope.user);
   });
 
   // ADD PLAYERS TO ONLINE LIST
   hookly.on('sendList', function(data){
-    //console.log(data);
-    $scope.list = data;
+    $scope.list.push(data);
     $scope.$apply();    
   });
 
@@ -82,6 +86,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
     hookly.notify('word', word);
   });
 
+  // UPDATE WORD
   hookly.on('word', function(data){
     $scope.man = [];
     $scope.role = 'guesser';
@@ -93,10 +98,6 @@ app.controller('MainCtrl', function($scope, $rootScope){
     $scope.word = {length: len, string: data};
     $scope.$apply();
   });
-
-  $scope.hangman = [' O', '- ', '-', ' |', '/', '\\'];
-  $scope.count = -1;
-  $scope.man = [];
 
   $scope.submitLetter = function(letter){
     var str = $scope.word.string.split('');
@@ -116,7 +117,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
       }
     }
     if(found == false){
-      if($scope.count == 4){
+      if($scope.count == 5){
         $scope.playerLosesByCount();
       } else {
         $scope.count += 1;
@@ -134,12 +135,14 @@ app.controller('MainCtrl', function($scope, $rootScope){
       hookly.notify('playerWon', $scope.user.name);
     } else {
       alert('"' + word + '"' + ' was incorrect.');
-      if($scope.count == 4){
+      if($scope.count == 5){
+        debugger
         $scope.playerLosesByCount();
+      } else {
+        $scope.count += 1;
+        hookly.notify('addPart', $scope.count);
+        $scope.man.push($scope.hangman[$scope.count]);
       }
-      $scope.count += 1;
-      hookly.notify('addPart', $scope.count);
-      $scope.man.push($scope.hangman[$scope.count]);
     }
   };
 
@@ -201,4 +204,3 @@ app.controller('MainCtrl', function($scope, $rootScope){
     alert(data + ' wins!' + " You lost!");
   })
 });
-
