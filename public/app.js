@@ -25,8 +25,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
 
   // ADD USER TO LIST ARRAY
   hookly.on('joined', function(data){
-    $scope.list.push(data);
-    $scope.$apply(); 
+    checkForUserInList(data);
   }); 
 
   $scope.getList = function(uid){
@@ -37,20 +36,28 @@ app.controller('MainCtrl', function($scope, $rootScope){
   hookly.on('getList', function(uid){
     if($scope.user.name){
       hookly.notify('sendList', uid, $scope.user);
-    }
-    
+    }   
   });
 
   // ADD PLAYERS TO ONLINE LIST
   hookly.on('sendList', function(data){
-    for(var i in $scope.list){
-      if($scope.list[i].id != data.id){
-        $scope.list.push(data);
-        $scope.$apply();  
-      }
-    }
-      
+    checkForUserInList(data);
   });
+
+  function checkForUserInList(data){
+    debugger
+    if($scope.list.length > 0){
+      for(var i in $scope.list){
+        if($scope.list[i].id != data.id){
+          $scope.list.push(data);
+          $scope.$apply();  
+        }
+      }  
+    } else {
+      $scope.list.push(data);
+      $scope.$apply();
+    }    
+  }
 
   // REQUEST TO PLAY
   $scope.play = function(uid){
@@ -178,7 +185,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
   $scope.playerLoses = function(){
     $scope.user.loses += 1;
     $scope.role = '';
-  }
+  };
 
   $scope.playerLosesByCount = function(){
     alert("YOU LOST, MAN IS BUILT");
@@ -186,7 +193,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
     $scope.count += 1;  
     $scope.man.push($scope.hangman[$scope.count]);       
     hookly.notify('playerLost', $scope.count);
-  }
+  };
 
   hookly.on('letterFound', function(data){
     //console.log(data);
@@ -211,5 +218,5 @@ app.controller('MainCtrl', function($scope, $rootScope){
     $scope.role = '';
     $scope.$apply();
     alert(data + ' wins!' + " You lost!");
-  })
+  });
 });
