@@ -22,6 +22,7 @@ app.controller('MainCtrl', function($scope, $rootScope){
     hookly.notify('joined', $scope.user);
     $scope.getList($scope.user.id);
   };
+
   // ADD USER TO LIST ARRAY
   hookly.on('joined', function(data){
     $scope.list.push(data);
@@ -34,13 +35,21 @@ app.controller('MainCtrl', function($scope, $rootScope){
 
   // RESPONSE TO GET LIST = SEND LIST
   hookly.on('getList', function(uid){
-    hookly.notify('sendList', uid, $scope.user);
+    if($scope.user.name){
+      hookly.notify('sendList', uid, $scope.user);
+    }
+    
   });
 
   // ADD PLAYERS TO ONLINE LIST
   hookly.on('sendList', function(data){
-    $scope.list.push(data);
-    $scope.$apply();    
+    for(var i in $scope.list){
+      if($scope.list[i].id != data.id){
+        $scope.list.push(data);
+        $scope.$apply();  
+      }
+    }
+      
   });
 
   // REQUEST TO PLAY
