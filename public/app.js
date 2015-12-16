@@ -45,19 +45,27 @@ app.controller('MainCtrl', function($scope, $rootScope){
   });
 
   function checkForUserInList(data){
-    debugger
     if($scope.list.length > 0){
+      var presence = false;
       for(var i in $scope.list){
-        if($scope.list[i].id != data.id){
-          $scope.list.push(data);
-          $scope.$apply();  
+        if($scope.list[i].id == data.id){
+          presence = true;
         }
+      }
+      if(!presence){
+        $scope.list.push(data);
+        $scope.$apply(); 
       }  
     } else {
       $scope.list.push(data);
       $scope.$apply();
     }    
   }
+
+  // window.onbeforeunload = closingCode;
+  // function closingCode(){
+  //   alert("CLOSING");
+  // }
 
   // REQUEST TO PLAY
   $scope.play = function(uid){
@@ -152,7 +160,6 @@ app.controller('MainCtrl', function($scope, $rootScope){
     } else {
       alert('"' + word + '"' + ' was incorrect.');
       if($scope.count == 5){
-        debugger
         $scope.playerLosesByCount();
       } else {
         $scope.count += 1;
