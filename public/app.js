@@ -62,6 +62,44 @@ app.controller('MainCtrl', function($scope, $rootScope){
     }    
   }
 
+  // $scope.$on('$locationChangeStart', function( event ) {
+  //   var answer = confirm("Are you sure you want to leave this page?")
+  //   if (!answer) {
+  //     event.preventDefault();
+  //   }
+  // });
+
+  // window.onbeforeunload = function (event) {
+  //   var message = 'Sure you want to leave?';
+  //   debugger
+  //   if (typeof event == 'undefined') {
+  //     event = window.event;
+  //   }
+  //   if (event) {
+  //     var answer = confirm(message);
+  //     if(answer == true){
+  //       removeUserFromList();
+  //     }
+  //     event.returnValue = message;
+  //   }
+  //   return message;
+  // }
+
+  // function removeUserFromList(){
+  //   debugger
+  //   hookly.notify('userLeaving', $scope.user.id);
+  // }
+
+  // hookly.on('userLeaving', function(data){
+  //   if($scope.list > 0){
+  //     for(var i in $scope.list){
+  //       if($scope.list[i].id == data.id){
+  //         $scope.list.splice(i,1);
+  //       }
+  //     }
+  //   }   
+  // });
+
   // window.onbeforeunload = closingCode;
   // function closingCode(){
   //   alert("CLOSING");
